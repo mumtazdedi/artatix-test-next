@@ -49,6 +49,7 @@ export function AppSidebar() {
 
   const handleLogout = () => {
     removeCookiesToken();
+    localStorage.removeItem("token");
     router.push("/login");
   };
 

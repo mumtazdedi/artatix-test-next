@@ -13,13 +13,11 @@ export default function DashboardLayout({
         <Suspense>
           <AppSidebar />
         </Suspense>
-        <main className="overflow-hidden">
+        <main className="overflow-hidden w-full">
           <div className="p-2">
             <SidebarTrigger />
           </div>
-          <div className="p-4 bg-slate-100 min-h-screen w-screen">
-            {children}
-          </div>
+          <div className="p-4 bg-slate-100 min-h-screen w-full">{children}</div>
         </main>
       </SidebarProvider>
     </div>

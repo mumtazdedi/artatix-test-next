@@ -16,8 +16,8 @@ import { useFormStatus } from "react-dom";
 import { LoadingButton } from "@/components/loading-button";
 import { toast } from "sonner";
 import { handleErrorMessage } from "@/lib/utils";
-import { setCookies } from "@/lib/cookiesStore";
 import { useRouter } from "next/navigation";
+import { setCookies } from "@/lib/cookiesStore";
 
 export default function LoginSection() {
   const { pending } = useFormStatus();
@@ -45,10 +45,11 @@ export default function LoginSection() {
       await signInApi(data)
         .unwrap()
         .then((res) => {
+          localStorage.setItem("token", res.token);
           setCookies(res.token);
-          router.push("/dashboard");
-          toast.success("Login success");
         });
+      router.push("/dashboard");
+      toast.success("Login success");
     } catch (error) {
       toast.error(handleErrorMessage(error));
     }
