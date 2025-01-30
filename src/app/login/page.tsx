@@ -3,6 +3,7 @@ import ArtatixLogo from "@/assets/artatix-logo.svg";
 import BgLogin from "@/assets/bg-login.svg";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 const LoginSection = dynamic(() => import("@/sections/LoginSection"));
 
 export default function Login() {
@@ -29,7 +30,9 @@ export default function Login() {
             className="w-full max-w-1/2 block lg:hidden"
           />
         </div>
-        <LoginSection />
+        <Suspense>
+          <LoginSection />
+        </Suspense>
       </div>
     </div>
   );

@@ -7,24 +7,28 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
 import GoogleIcon from "@/assets/google-icon.svg";
-import { useActionState } from "react";
-import { signIn } from "@/actions/login-action";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignInSchema } from "@/actions/login-schema";
+import { useSignInMutation } from "@/services/auth";
+import { SignInRequest } from "@/interfaces/auth";
+import { useFormStatus } from "react-dom";
+import { LoadingButton } from "@/components/loading-button";
+import { toast } from "sonner";
+import { handleErrorMessage } from "@/lib/utils";
+import { setCookies } from "@/lib/cookiesStore";
+import { useRouter } from "next/navigation";
 
 export default function LoginSection() {
-  const [signInState, action] = useActionState(signIn, {});
+  const { pending } = useFormStatus();
+  const router = useRouter();
 
-  const form = useForm<{
-    email: string;
-    password: string;
-  }>({
+  const form = useForm<SignInRequest>({
     resolver: zodResolver(SignInSchema),
     mode: "onChange",
     defaultValues: {
-      email: signInState.email,
-      password: signInState.password,
+      email: "",
+      password: "",
     },
   });
 
@@ -34,12 +38,24 @@ export default function LoginSection() {
     formState: { errors: formErrors },
   } = form;
 
-  const onSubmit = async (data: { email: string; password: string }) => {
-    console.log(data);
+  const [signInApi] = useSignInMutation();
+
+  const onSubmit = async (data: SignInRequest) => {
+    try {
+      await signInApi(data)
+        .unwrap()
+        .then((res) => {
+          setCookies(res.token);
+          router.push("/dashboard");
+          toast.success("Login success");
+        });
+    } catch (error) {
+      toast.error(handleErrorMessage(error));
+    }
   };
 
   return (
-    <form action={action} className="m-auto" onSubmit={handleSubmit(onSubmit)}>
+    <form className="m-auto" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <h1 className="text-xl font-medium">Welcome Back!</h1>
@@ -94,9 +110,14 @@ export default function LoginSection() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <Button type="submit">
-            <LogIn className="h-4 w-4 mr-1" />
-            Sign In
+          <Button type="submit" disabled={pending}>
+            {pending && <LoadingButton />}
+            {!pending && (
+              <>
+                <LogIn className="h-4 w-4 mr-1" />
+                Sign In
+              </>
+            )}
           </Button>
           <Button variant="outline">
             <Image src={GoogleIcon} alt="google-icon" />
