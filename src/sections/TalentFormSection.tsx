@@ -153,6 +153,7 @@ export default function TalentFormSection({ onClose, talent }: Props) {
               {...register("image")}
               type="file"
               className="hidden"
+              accept="image/*"
             />
           </div>
 
