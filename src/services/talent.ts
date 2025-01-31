@@ -23,32 +23,56 @@ export const talentApi = createApi({
       query: (id) => ({
         url: `talent/${id}`,
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }),
       providesTags: ["Talent"],
     }),
     createTalent: builder.mutation<TalentResponse, TalentRequest>({
-      query: (body) => ({
-        url: "talent",
-        method: "POST",
-        body,
-      }),
+      query: (body) => {
+        const formData = new FormData();
+        if (body.image) formData.append("image", body.image?.[0]);
+        if (body.name) formData.append("name", body.name);
+        return {
+          url: "talent",
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        };
+      },
       invalidatesTags: ["Talent"],
     }),
     updateTalent: builder.mutation<
       TalentResponse,
       { id: string; body: TalentRequest }
     >({
-      query: ({ id, body }) => ({
-        url: `talent/${id}`,
-        method: "PUT",
-        body,
-      }),
+      query: ({ id, body }) => {
+        const formData = new FormData();
+        if (body.image) formData.append("image", body.image?.[0]);
+        if (body.name) formData.append("name", body.name);
+
+        formData.append("isActive", body.isActive?.toString() || "0");
+        return {
+          url: `talent/${id}`,
+          method: "PUT",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        };
+      },
       invalidatesTags: ["Talent"],
     }),
     deleteTalent: builder.mutation<TalentResponse, string>({
       query: (id) => ({
         url: `talent/${id}`,
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }),
       invalidatesTags: ["Talent"],
     }),

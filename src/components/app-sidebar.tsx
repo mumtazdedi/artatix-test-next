@@ -100,14 +100,14 @@ export function AppSidebar() {
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
-                  Are you sure you want to logout?
+                  Apakah anda yakin ingin logout?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  You will be logged out of your account.
+                  Anda akan keluar dari aplikasi.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>Batal</AlertDialogCancel>
                 <AlertDialogAction onClick={handleLogout}>
                   Logout
                 </AlertDialogAction>
@@ -117,13 +117,5 @@ export function AppSidebar() {
         </SidebarFooter>
       </Sidebar>
     </>
-    // <Sidebar>
-    //   <SidebarHeader />
-    //   <SidebarContent>
-    //     <SidebarGroup />
-    //     <SidebarGroup />
-    //   </SidebarContent>
-    //   <SidebarFooter />
-    // </Sidebar>
   );
 }

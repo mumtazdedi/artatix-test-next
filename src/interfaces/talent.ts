@@ -1,15 +1,15 @@
 export interface TalentRequest {
   id?: number;
   name: string;
-  image: any;
-  isActive?: boolean;
+  image?: any;
+  isActive?: number;
 }
 
 export interface TalentResponse {
   id: number;
   name: string;
   image: string;
-  isActive: boolean;
+  isActive: number;
 }
 
 export interface TalentList {
